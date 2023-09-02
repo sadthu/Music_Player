@@ -1,0 +1,30 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard {
+    text-align: center;
+}
+
+.cd {
+    width: 200px;
+    display: inline-block;
+}
+
+.cd-thumb {
+    width: 100%;
+    padding-top: 100%;
+    border-radius: 50%;
+    background-image: url('https://photo-resize-zmp3.zadn.vn');
+    background-size: cover;
+} 
+
+.btn .fa-pause {
+    display: none;
+}
+
+.control {
+    display: flex;
+    justify-content: space-evenly;
+}
