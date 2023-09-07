@@ -1,8 +1,21 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
+const header = $('header h2')
+const cdThumb = $('.cd-thumb')
+const audio = $('#audio')
+const cd = $('.cd')
+const btnRepeat = $('.btn-repeat')
+const btnPrev = $('.btn-prev')
+const btnPlayPause = $('.btn-playpause')
+const btnNext = $('.btn-next')
+const btnRandom = $('.btn-random')
+const progress = $('#progress')
 
+// properties: lấy giá trị; events: xử lý sự kiện xảy ra; method; xử lý các hành động của người dùng
 
 const app = {
+    currentIndex: 0,
+    isPlaying: false,
     songs : [
         {
             Name: 'Gió',
@@ -97,22 +110,103 @@ const app = {
         listSong.innerHTML = htmls.join('')
     },
 
+    // Định nghĩa thuộc tính cho object (object.defineProperty)
+    defineProperties: function() {
+        Object.defineProperty(this, 'currentSong',{
+            get: function() {
+                return this.songs[this.currentIndex]
+            }
+        })
+    },
+
     handleEvents: function() {
-        const cd = $('.cd')
+        const _this = this
         const cdWidth = cd.offsetWidth
-        console.log(cdWidth)
+
+        const cdThumbAnimate = cdThumb.animate([
+            {transform: "rotate(360deg)" }
+        ], {
+            duration: 10000,
+            iterations: Infinity
+        })
+        cdThumbAnimate.pause()
+
         document.onscroll = function() {
             const scrollTop = window.scrollY || document.documentElement.scrollTop
-            console.log(scrollTop)
             const newCdWidth =  cdWidth - scrollTop
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0
-            cd.style.opacity = newCdWidth / cdWidth
-            
+            cd.style.opacity = newCdWidth / cdWidth   
+        }
+
+        btnPlayPause.onclick = function () {
+            if (_this.isPlaying) {
+                audio.pause()
+            } else {
+                audio.play()
+            }
+        }
+
+        audio.onplay = function() {
+            _this.isPlaying = true
+            btnPlayPause.classList.add('playing')
+            cdThumbAnimate.play()
+        }
+
+        audio.onpause = function() {
+            _this.isPlaying = false
+            btnPlayPause.classList.remove('playing')
+            cdThumbAnimate.pause()
+        }
+
+        audio.ontimeupdate = function() {
+            if(audio.duration) {
+                const percentProgress = Math.floor(audio.currentTime / audio.duration * 100)
+                progress.value = percentProgress
+            }
+        }
+
+        progress.oninput = function(e) {
+            const seekTime = Math.floor(e.target.value * audio.duration / 100)
+            audio.currentTime = seekTime
+        }
+
+        btnNext.onclick =  function() {
+            _this.nextSong()
+            audio.play()
+        }
+
+        btnPrev.onclick =  function() {
+            _this.prevSong()
+            audio.play()
         }
     },
 
+    loadCurrentSong: function() {
+        header.innerHTML = this.currentSong.Name
+        cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
+        audio.src = this.currentSong.path
+    },
+
+    nextSong: function() {
+        this.currentIndex++
+        if (this.currentIndex >= this.songs.length) {
+            this.currentIndex = 0
+        }
+        this.loadCurrentSong()
+    },
+
+    prevSong: function() {
+        this.currentIndex--
+        if (this.currentIndex < 0) {
+            this.currentIndex = this.songs.length - 1
+        }
+        this.loadCurrentSong()
+    },
+
     start: function() {
+        this.defineProperties()
         this.handleEvents()
+        this.loadCurrentSong()
         this.render()
     }
 }

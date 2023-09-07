@@ -33,6 +33,14 @@
     display: none;
 }
 
+.playing .fa-play{
+    display: none;
+}
+
+.playing .fa-pause{
+    display: inline-block;
+}
+
 .control {
     display: flex;
     justify-content: space-evenly;
