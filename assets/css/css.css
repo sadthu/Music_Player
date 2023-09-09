@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+.active {
+    color: red
+}
+
 .dashboard {
     text-align: center;
     position: fixed;

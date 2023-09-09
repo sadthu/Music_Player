@@ -122,6 +122,7 @@ const app = {
     handleEvents: function() {
         const _this = this
         const cdWidth = cd.offsetWidth
+        const isRandom = false
 
         const cdThumbAnimate = cdThumb.animate([
             {transform: "rotate(360deg)" }
@@ -171,13 +172,26 @@ const app = {
         }
 
         btnNext.onclick =  function() {
-            _this.nextSong()
+            if(_this.isRandom) {
+                _this.playRandomSong()
+            } else {
+                _this.nextSong()
+            }
             audio.play()
         }
 
         btnPrev.onclick =  function() {
-            _this.prevSong()
+            if(_this.isRandom) {
+                _this.playRandomSong()
+            } else {
+                _this.prevSong()
+            }
             audio.play()
+        }
+
+        btnRandom.onclick = function() {
+            _this.isRandom = !_this.isRandom
+            btnRandom.classList.toggle('active', _this.isRandom)
         }
     },
 
@@ -200,6 +214,15 @@ const app = {
         if (this.currentIndex < 0) {
             this.currentIndex = this.songs.length - 1
         }
+        this.loadCurrentSong()
+    },
+
+    playRandomSong: function() {
+        let newIndex
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length)
+        } while (newIndex === this.currentIndex)
+        this.currentIndex = newIndex
         this.loadCurrentSong()
     },
 
