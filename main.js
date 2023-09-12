@@ -1,5 +1,8 @@
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
+
+const PLAYER_STORAGE_KEY = 'PLAYER'
+
 const header = $('header h2')
 const cdThumb = $('.cd-thumb')
 const audio = $('#audio')
@@ -10,12 +13,25 @@ const btnPlayPause = $('.btn-playpause')
 const btnNext = $('.btn-next')
 const btnRandom = $('.btn-random')
 const progress = $('#progress')
+const listSongNode = $('.list_song')
 
 // properties: lấy giá trị; events: xử lý sự kiện xảy ra; method; xử lý các hành động của người dùng
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
+    isRandom : false,
+    isRepeat: false,
+
+    // lấy data từ localStorage
+    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+
+    // đưa data lên localStorage
+    setConfig: function(key, value) {
+        this.config[key] = value
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    },
+
     songs : [
         {
             Name: 'Gió',
@@ -88,6 +104,36 @@ const app = {
             author: 'Nal',
             path: './assets/list_song/SaoTroiLamGio-Nal-11053176.mp3',
             image:'./assets/image/1692690750438_640.jpg'
+        },
+        {
+            Name: 'Sao trời làm gió',
+            author: 'Nal',
+            path: './assets/list_song/SaoTroiLamGio-Nal-11053176.mp3',
+            image:'./assets/image/1692690750438_640.jpg'
+        },
+        {
+            Name: 'Sao trời làm gió',
+            author: 'Nal',
+            path: './assets/list_song/SaoTroiLamGio-Nal-11053176.mp3',
+            image:'./assets/image/1692690750438_640.jpg'
+        },
+        {
+            Name: 'Sao trời làm gió',
+            author: 'Nal',
+            path: './assets/list_song/SaoTroiLamGio-Nal-11053176.mp3',
+            image:'./assets/image/1692690750438_640.jpg'
+        },
+        {
+            Name: 'Sao trời làm gió',
+            author: 'Nal',
+            path: './assets/list_song/SaoTroiLamGio-Nal-11053176.mp3',
+            image:'./assets/image/1692690750438_640.jpg'
+        },
+        {
+            Name: 'Sao trời làm gió',
+            author: 'Nal',
+            path: './assets/list_song/SaoTroiLamGio-Nal-11053176.mp3',
+            image:'./assets/image/1692690750438_640.jpg'
         }
     ],
 
@@ -95,7 +141,7 @@ const app = {
         var listSong = $('.list_song')
         const htmls = this.songs.map((song, index) => {
             return `
-                <div class="song">
+                <div class="song" data-index=${index}>
                 <div class="thumb" style="background-image: url('${song.image}');"></div>
                 <div class="body">
                     <h3 class="title">${song.Name}</h3>
@@ -122,7 +168,6 @@ const app = {
     handleEvents: function() {
         const _this = this
         const cdWidth = cd.offsetWidth
-        const isRandom = false
 
         const cdThumbAnimate = cdThumb.animate([
             {transform: "rotate(360deg)" }
@@ -191,7 +236,42 @@ const app = {
 
         btnRandom.onclick = function() {
             _this.isRandom = !_this.isRandom
+            _this.setConfig('isRandom', _this.isRandom)
             btnRandom.classList.toggle('active', _this.isRandom)
+        }
+
+        btnRepeat.onclick = function() {
+            _this.isRepeat = !_this.isRepeat
+            _this.setConfig('isRepeat', _this.isRepeat)
+            btnRepeat.classList.toggle('active', _this.isRepeat)
+        }
+
+        listSongNode.onclick = function(e) {
+            const songNode = e.target.closest('.song:not(.active)') // chọn node song không có active
+            const optionNode =  e.target.closest('.option')
+            if (songNode || optionNode) {
+                //xử lý khi click vào node song không active
+                if (songNode) {
+                    _this.currentIndex = Number(songNode.dataset.index)
+                    _this.loadCurrentSong()
+                    _this.activeSong()
+                    audio.play()
+                }
+
+                //xử lý khi click vào node option
+                if(optionNode) {
+
+                }
+            }
+
+        }
+
+        audio.onended = function() {
+            if(_this.isRepeat) {
+                audio.play()
+            } else {
+                btnNext.click()
+            }
         }
     },
 
@@ -201,12 +281,19 @@ const app = {
         audio.src = this.currentSong.path
     },
 
+    loadConfig: function() {
+        this.isRandom = this.config.isRandom
+        this.isRepeat = this.config.isRepeat
+    },
+
     nextSong: function() {
         this.currentIndex++
         if (this.currentIndex >= this.songs.length) {
             this.currentIndex = 0
         }
         this.loadCurrentSong()
+        this.activeSong()
+        this.scrollToActiveSong()
     },
 
     prevSong: function() {
@@ -215,6 +302,8 @@ const app = {
             this.currentIndex = this.songs.length - 1
         }
         this.loadCurrentSong()
+        this.activeSong()
+        this.scrollToActiveSong()
     },
 
     playRandomSong: function() {
@@ -224,13 +313,39 @@ const app = {
         } while (newIndex === this.currentIndex)
         this.currentIndex = newIndex
         this.loadCurrentSong()
+        this.activeSong()
+        this.scrollToActiveSong()
+    },
+
+    activeSong: function() {
+        const nodeSongs = $$('.song')
+        nodeSongs.forEach(function(nodeSong) {
+            const indexSong = Number(nodeSong.dataset.index)
+            if(indexSong === app.currentIndex) {
+                nodeSong.classList.add('active')
+            } else {
+                nodeSong.classList.remove('active')
+            }
+        })
+    },
+
+    scrollToActiveSong: function() {
+        const songActive = $('.song.active')
+        songActive.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        })
     },
 
     start: function() {
+        this.loadConfig()
         this.defineProperties()
         this.handleEvents()
         this.loadCurrentSong()
         this.render()
+        this.activeSong()
+        btnRandom.classList.toggle('active', this.isRandom)
+        btnRepeat.classList.toggle('active', this.isRepeat)
     }
 }
 

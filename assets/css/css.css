@@ -61,6 +61,15 @@
     justify-content: space-between
 }
 
+.song:active {
+    opacity: 0.8
+}
+
+.song.active{
+    background-color: red;
+    color: #fff;
+}
+
 .thumb {
     width: 50px;
     height: 50px;
