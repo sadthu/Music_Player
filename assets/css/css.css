@@ -13,7 +13,8 @@
   width: 100%;
   background-color: #fff;
   top: 0;
-  padding-top: 15px;
+  padding: 15px 0 10px;
+  box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
 }
 
 .dashboard h4 {
@@ -74,7 +75,7 @@
 }
 
 .list_song {
-  margin-top: 400px;
+  margin-top: 430px;
 }
 
 .song {
