@@ -1,78 +1,119 @@
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .active {
-    color: red
+  color: red;
 }
 
 .dashboard {
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    background-color: #fff;
-    top: 0;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  top: 0;
+  padding-top: 15px;
+}
+
+.dashboard h4 {
+  color: #ee0000;
 }
 
 .dashboard input {
-    width: 90%;
+  width: 90%;
 }
 
 .cd {
-    width: 200px;
-    display: inline-block;
-    animation: all linear 0.2s;
+  width: 200px;
+  display: inline-block;
+  animation: all linear 0.2s;
+  margin-top: 10px;
 }
 
 .cd-thumb {
-    width: 100%;
-    padding-top: 100%;
-    border-radius: 50%;
-    background-image: url('https://photo-resize-zmp3.zadn.vn');
-    background-size: cover;
-} 
+  width: 100%;
+  padding-top: 100%;
+  border-radius: 50%;
+  background-image: url("https://photo-resize-zmp3.zadn.vn");
+  background-size: cover;
+}
+
+.control div {
+  display: flex;
+  align-items: center;
+}
+
+.btn-playpause {
+  padding: 15px;
+  border-radius: 50%;
+  background-color: #d92629;
+}
+
+.btn-playpause i {
+  color: #fff;
+  width: 16px;
+}
 
 .btn .fa-pause {
-    display: none;
+  display: none;
 }
 
-.playing .fa-play{
-    display: none;
+.playing .fa-play {
+  display: none;
 }
 
-.playing .fa-pause{
-    display: inline-block;
+.playing .fa-pause {
+  display: inline-block;
 }
 
 .control {
-    display: flex;
-    justify-content: space-evenly;
-    margin: 30px 0 30px 0;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 30px 0 30px 0;
 }
 
 .list_song {
-    margin-top: 400px;
+  margin-top: 400px;
 }
 
 .song {
-    margin: 10px;
-    display: flex;
-    justify-content: space-between
+  margin: 10px;
+  padding: 5px 10px;
+  display: flex;
+  border-radius: 7px;
+  justify-content: space-between;
+}
+
+.song div {
+  display: flex;
+  align-items: center;
+}
+
+.song .body {
+  width: 200px;
+  justify-content: space-between;
+}
+
+.song .body h3 {
+  white-space: nowrap;
+  width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .song:active {
-    opacity: 0.8
+  opacity: 0.8;
 }
 
-.song.active{
-    background-color: red;
-    color: #fff;
+.song.active {
+  background-color: #ee0000;
+  color: #fff;
 }
 
 .thumb {
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-    background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  background-size: cover;
 }

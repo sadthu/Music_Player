@@ -142,14 +142,14 @@ const app = {
         const htmls = this.songs.map((song, index) => {
             return `
                 <div class="song" data-index=${index}>
-                <div class="thumb" style="background-image: url('${song.image}');"></div>
-                <div class="body">
-                    <h3 class="title">${song.Name}</h3>
-                    <p class="author">${song.author}</p>
-                </div>
-                <div class="option">
-                    <i class="fas fa-ellipsis-h"></i>
-                </div>
+                    <div class="thumb" style="background-image: url('${song.image}');"></div>
+                    <div class="body">
+                        <h3 class="title">${song.Name}</h3>
+                        <p class="author">${song.author}</p>
+                    </div>
+                    <div class="option">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
                 </div>
             `
         })
@@ -165,7 +165,7 @@ const app = {
         })
     },
 
-    handleEvents: function() {
+    handleEvents: function() { 
         const _this = this
         const cdWidth = cd.offsetWidth
 
